@@ -1,0 +1,13 @@
+;Movimento de AIH - Arquivos Reduzidos
+
+ADADOS\RD*.DBC
+?\TAB\RD.HLP
+
+IValor Total                   ,VAL_TOT
+IDiárias                       ,QT_DIARIAS
+
+LUF internação      ,MUNIC_MOV      ,1 ,CNV\UF.CNV
+LSexo               ,SEXO          ,1     ,CNV\SEXO.CNV
+XSexo               ,SEXO          ,1     ,CNV\SEXO.CNV
+XFaixa etária (5)   ,COD_IDADE     ,1     ,CNV\IDADEBAS.CNV
+XNacionalidade                     ,NACIONAL   , 1 ,CNV\NACION3D.CNV

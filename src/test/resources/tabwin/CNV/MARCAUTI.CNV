@@ -1,0 +1,16 @@
+14 2 L
+     01  Não utilizou UTI                                   00
+     02  UTI adulto - tipo I                                74
+     03  UTI adulto - tipo II                               75
+     04  UTI adulto - tipo III                              76
+     05  UTI infantil - tipo I                              77
+     06  UTI infantil - tipo II                             78
+     07  UTI infantil - tipo III                            79
+     08  UTI neonatal - tipo I                              80
+     08  UTI neonatal - tipo II                             81
+     09  UTI neonatal - tipo III                            82
+     10  UTI de queimados                                   83
+     11  UTI coronariana tipo II - UCO tipo II              85
+     12  UTI coronariana tipo III - UCO tipo III            86
+     13  UTI Doador                                         99
+     14  Utilizou mais de um tipo de UTI                    01

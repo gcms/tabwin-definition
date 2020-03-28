@@ -1,0 +1,39 @@
+N 38 2 L
+        1  01-Cirúrgico                                                                                         01
+        2  02-Obstétricos                                                                                       02
+        3  03-Clínico                                                                                           03
+        4  04-Crônicos                                                                                          04
+        5  05-Psiquiatria                                                                                       05
+        6  06-Pneumologia Sanitária (Tisiologia)                                                                06
+        7  07-Pediátricos                                                                                       07
+        8  08-Reabilitação                                                                                      08
+        9  09-Leito Dia / Cirúrgicos                                                                            09
+       10  10-Leito Dia / Aids                                                                                  10
+       11  11-Leito Dia / Fibrose Cística                                                                       11
+       12  12-Leito Dia / Intercorrência Pós-Transplante                                                        12
+       13  13-Leito Dia / Geriatria                                                                             13
+       14  14-Leito Dia / Saúde Mental                                                                          14
+       15  64-Unidade Intermediária                                                                             64
+       16  65-Unidade Intermediária Neonatal                                                                    65
+       17  74-UTI I                                                                                             74
+       18  75-UTI Adulto II                                                                                     75
+       19  76-UTI Adulto III                                                                                    76
+       20  77-UTI Infantil I                                                                                    77
+       21  78-UTI Infantil II                                                                                   78
+       22  79-UTI Infantil III                                                                                  79
+       23  80-UTI Neonatal I                                                                                    80
+       24  81-UTI Neonatal II                                                                                   81
+       25  82-UTI Neonatal III                                                                                  82
+       26  83-UTI Queimados                                                                                     83
+       27  84-Acolhimento Noturno                                                                               84
+       28  85-UTI Coronariana-UCO tipo II                                                                       85
+       29  86-UTI Coronariana-UCO tipo III                                                                      86
+       30  87-Saúde Mental (Clínico)                                                                            87
+       31  88-Queimado Adulto (Clínico)                                                                         88
+       32  89-Queimado Pediátrico (Clínico)                                                                     89
+       33  90-Queimado Adulto (Cirúrgico)                                                                       90
+       34  91-Queimado Pediátrico (Cirúrgico)                                                                   91
+       35  92-UCI Unidade de Cuidados Intermediarios Neonatal Convencional                                      92
+       36  93-UCI Unidade de Cuidados Intermediarios Neonatal Canguru                                           93
+       37  94-UCI Unidade de Cuidados Intermediarios Pediatrico                                                 94
+       38  95-UCI Unidade de Cuidados Intermediarios Adulto                                                     95

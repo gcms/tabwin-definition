@@ -1,0 +1,13 @@
+12 4 L     
+     01  S/crédito na média complex ambulatorial (exc FAEC) 7101
+     02  S/crédito na média complex hospitalar (exc FAEC)   7102
+     03  S/crédito na alta complex ambulatorial (exc FAEC)  7103
+     04  S/crédito na alta complex hospitalar (exc FAEC)    7104
+     05  S/crédito nos procedimentos financ FAEC            7105
+     06  S/crédito total incluindo FAEC                     7106
+     07  S/crédito nas ações esp odonto (CEO I II III)      7107
+     08  S/crédito incentivo Saúde do Trabalhador exc FAEC  7108
+     09  S/crédito total HU/MEC                             7109 
+     10  S/crédito total Minist Saúde                       7110
+     11  S/crédito NASF exc FAEC                            7111
+     12  Sem regra contratual                               0000
