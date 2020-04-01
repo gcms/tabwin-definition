@@ -8,12 +8,16 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class DBFCategory implements Category {
-    private String keyValue;
-    private String descValue;
+    private final String keyValue;
+    private final String descValue;
+
+    private final Collection<ConversionFilter> filters;
 
     public DBFCategory(String keyValue, String descValue) {
         this.keyValue = keyValue;
         this.descValue = descValue;
+
+        this.filters = Collections.singleton(value -> value.equals(keyValue));
     }
 
 
@@ -28,7 +32,7 @@ public class DBFCategory implements Category {
 
     @Override
     public Collection<? extends ConversionFilter> getFilter() {
-        return Collections.singleton(value -> value.equals(keyValue));
+        return filters;
     }
 
     @Override

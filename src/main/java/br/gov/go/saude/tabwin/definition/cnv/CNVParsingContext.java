@@ -17,7 +17,12 @@ public class CNVParsingContext {
     private String name;
     private String comment;
 
-    public void setNumLines(int numLines) {
+
+    public int getCategoriesCount() {
+        return numLines;
+    }
+
+    public void setCategoriesCount(int numLines) {
         this.numLines = numLines;
         this.categories = new CNVCategory[numLines];
     }
@@ -48,8 +53,16 @@ public class CNVParsingContext {
 
     }
 
-    public CNV build() {
+    public CNV build() throws CNVParseException {
         CNVHeader header = new CNVHeader(name, comment, numLines, fieldLength, type, hasRange, !hasCharOnFilters);
+
+        for (int i = 0; i < categories.length; i++) {
+            CNVCategory category = categories[i];
+            if (category == null) {
+                throw CNVParseException.missingCategories(header, i);
+            }
+        }
+
         return new CNV(header, categories);
     }
 
@@ -75,7 +88,8 @@ public class CNVParsingContext {
         currentLine++;
     }
 
-    public int getCurrentLine() {
+    public int getCurrentLineCount() {
         return currentLine;
     }
+
 }

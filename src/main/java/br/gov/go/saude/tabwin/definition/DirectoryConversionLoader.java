@@ -6,11 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DirectoryConversionLoader implements ConversionLoader {
     private static final Logger log = LoggerFactory.getLogger(DirectoryConversionLoader.class);
+
+    private static final Charset DEFAULT_CHARSET = Charset.forName("Windows-1252");
 
     private final Map<String, ConversionFile> cnvs = new ConcurrentHashMap<>();
     private final File baseDir;
@@ -19,13 +22,18 @@ public class DirectoryConversionLoader implements ConversionLoader {
             new CNVParser(), new DBFParser()
     };
 
+
     private List<ConversionParser> parsers;
 
     public DirectoryConversionLoader(final File baseDir) {
-        this(baseDir, Arrays.asList(DEFAULT_PARSERS));
+        this(baseDir, DEFAULT_CHARSET);
     }
 
-    public DirectoryConversionLoader(final File baseDir, Collection<ConversionParser> parsers) {
+    public DirectoryConversionLoader(final File baseDir, final Charset charset) {
+        this(baseDir, Arrays.asList(DEFAULT_PARSERS), charset);
+    }
+
+    public DirectoryConversionLoader(final File baseDir, final Collection<ConversionParser> parsers, final Charset charset) {
         this.baseDir = baseDir;
         this.parsers = new ArrayList<>(parsers);
     }

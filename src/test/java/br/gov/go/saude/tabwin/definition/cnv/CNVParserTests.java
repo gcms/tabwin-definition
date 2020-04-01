@@ -136,7 +136,7 @@ public class CNVParserTests {
 
 
     @Test
-    public void testParseLineWithEmptyValues() {
+    public void testParseLineWithEmptyValues() throws CNVParseException {
         CNVParsingContext ctx = Mockito.mock(CNVParsingContext.class);
 
         String line = "    167  G00.9 Meningite bacteriana não especificada        G009,G00 ,";
@@ -148,7 +148,7 @@ public class CNVParserTests {
     }
 
     @Test
-    public void testParseLineWithAlphaValues() {
+    public void testParseLineWithAlphaValues() throws CNVParseException {
         CNVParsingContext ctx = Mockito.mock(CNVParsingContext.class);
 
         String line = "    167  G00.9 Meningite bacteriana não especificada        G009,G00 ,";
@@ -159,7 +159,7 @@ public class CNVParserTests {
     }
 
     @Test
-    public void testParseLineWithComments() {
+    public void testParseLineWithComments() throws CNVParseException {
         CNVParsingContext ctx = Mockito.mock(CNVParsingContext.class);
 
         String line = "    167  G00.9 Meningite bacteriana não especificada        G009,G00 ; Comentário";
@@ -171,7 +171,7 @@ public class CNVParserTests {
     }
 
     @Test
-    public void testParseEmptyLine() {
+    public void testParseEmptyLine() throws CNVParseException {
         CNVParsingContext ctx = Mockito.mock(CNVParsingContext.class);
 
         String line = "  ; Teste linha com comentário";
@@ -186,7 +186,7 @@ public class CNVParserTests {
         CNV cnv = TestUtils.parseCNV("/tabwin/CNV/ANO.CNV");
 
         assertEquals("ANO.CNV", cnv.getHeader().getName());
-        assertEquals(cnv.getHeader().getNumLines(), cnv.getEntries().count());
+        assertEquals(cnv.getHeader().getCategoriesCount(), cnv.getEntries().count());
         assertEquals(2, cnv.getHeader().getLength());
         assertTrue(cnv.getHeader().isLong());
         assertTrue(cnv.getHeader().hasRange());
@@ -206,26 +206,35 @@ public class CNVParserTests {
     public void testParseFileWithEmptyLinesAndComments() throws IOException {
         CNV cnv = TestUtils.parseCNV("/tabwin/CNV/ANO2.CNV");
 
-        assertEquals(cnv.getHeader().getNumLines(), cnv.getEntries().count());
+        assertEquals(cnv.getHeader().getCategoriesCount(), cnv.getEntries().count());
         assertEquals(2, cnv.getHeader().getLength());
         assertTrue(cnv.getHeader().isLong());
         assertTrue(cnv.getHeader().hasRange());
         assertTrue(cnv.getHeader().hasOnlyInts());
     }
 
-    @Test(expected = TabWinDefinitionException.class)
+    @Test(expected = CNVParseException.class)
     public void testParseInvalidDEF() throws IOException {
         InputStream is = getClass().getResourceAsStream("/tabwin/RD2008.DEF");
 
         new CNVParser().parse("RD2008.DEF", is);
     }
 
-    @Test(expected = TabWinDefinitionException.class)
+    @Test(expected = CNVParseException.class)
     public void testParseInvalidCNV() throws IOException {
         InputStream ano = getClass().getResourceAsStream("/tabwin/CNV/MALFORMED.CNV");
 
         new CNVParser().parse("MALFORMED.CNV", ano);
     }
+
+
+    @Test(expected = CNVParseException.class)
+    public void testParseInvalidCNVExtraCategory() throws IOException {
+        InputStream is = getClass().getResourceAsStream("/tabwin/CNV/outofrange.cnv");
+
+        new CNVParser().parse("outofrange.cnv", is);
+    }
+
 
     @Test
     public void testParseRepeatedLines() throws IOException {
@@ -247,6 +256,6 @@ public class CNVParserTests {
         assertTrue(cnv.getHeader().hasRange());
         assertFalse(cnv.getHeader().hasOnlyInts());
         assertTrue(cnv.getHeader().isLong());
-
     }
+
 }

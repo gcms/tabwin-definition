@@ -4,6 +4,8 @@ import br.gov.go.saude.tabwin.definition.*;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.stream.Collectors;
@@ -15,7 +17,7 @@ public class DBFTests {
     //        CGrupo de Procedimentos    ,PROC_REA  ,CO_GRUPO  ,DBF\TB_GRUPO.DBF
     //        SGrupo de Procedimentos    ,PROC_REA  ,NO_GRUPO  ,DBF\TB_GRUPO.DBF
     @Test
-    public void simpleProperties() throws URISyntaxException {
+    public void simpleProperties() throws URISyntaxException, FileNotFoundException {
 
         File tabWinDir = TestUtils.getTabWinDir();
         File dbfFile = new File(tabWinDir, "DBF/TB_GRUPO.DBF");
@@ -27,7 +29,7 @@ public class DBFTests {
     }
 
     @Test
-    public void keyFieldNotFound() throws URISyntaxException {
+    public void keyFieldNotFound() throws URISyntaxException, FileNotFoundException {
 
         File tabWinDir = TestUtils.getTabWinDir();
         File dbfFile = new File(tabWinDir, "DBF/TB_GRUPO.DBF");
@@ -44,12 +46,25 @@ public class DBFTests {
     }
 
     @Test
-    public void loadAndUseConversor() throws URISyntaxException {
-        DBF dbf = new DBF(TestUtils.getFile("/tabwin/DBF/TB_GRUPO.DBF"), Charset.forName("Cp850"));
+    public void loadConversor() throws IOException {
+        DBF dbf = TestUtils.parseDBF("/tabwin/DBF/TB_GRUPO.DBF");
         Dimension var = new Dimension(Variable.Type.L, "Grupo de Procedimentos", "PROC_REA", "NO_GRUPO", "TB_GRUPO.DBF");
 
         DBFConversor conversor = dbf.createMapping(var);
+        assertEquals(dbf, conversor.getFile());
+        assertEquals(0, conversor.getStartIndex());
+        assertEquals(2, conversor.getValueLength());
 
+        assertEquals(8, conversor.getEntries().count());
+        assertEquals(100, conversor.getDescriptionLength());
+    }
+
+    @Test
+    public void loadAndUseConversor() throws IOException {
+        DBF dbf = TestUtils.parseDBF("/tabwin/DBF/TB_GRUPO.DBF");
+        Dimension var = new Dimension(Variable.Type.L, "Grupo de Procedimentos", "PROC_REA", "NO_GRUPO", "TB_GRUPO.DBF");
+
+        DBFConversor conversor = dbf.createMapping(var);
 
         assertTrue(conversor.findByValue("03").isPresent());
         assertEquals("Procedimentos clínicos", conversor.findByValue("03").get().getDescription());

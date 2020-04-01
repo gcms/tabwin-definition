@@ -27,31 +27,9 @@ public class TabWinDefinitionException extends RuntimeException {
         return new TabWinDefinitionException(message);
     }
 
-    public static TabWinDefinitionException parseException(String message, Exception ex) {
-        return except(message, ex);
-    }
-
-    private static TabWinDefinitionException except(String message, Exception ex) {
-        return new TabWinDefinitionException(message, ex);
-    }
-
-    public static TabWinDefinitionException parseException(String message) {
-        return except(message);
-    }
-
-    public static TabWinDefinitionException illegalState(String message) {
-        return except(message);
-    }
-
     public static TabWinDefinitionException illegalArgument(String message) {
         return except(message);
     }
 
-    public static TabWinDefinitionException missingCategories(CNV.CNVHeader header) {
-        return illegalArgument(String.format("Invalid CNV file '%s', missing categories", header.getName()));
-    }
 
-    public static TabWinDefinitionException missingCategories(CNV.CNVHeader header, int i) {
-        return illegalArgument(String.format("Invalid CNV file '%s', missing category with sort order %d", header.getName(), i));
-    }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 public class DEFParser {
     private static final Logger log = LoggerFactory.getLogger(DEFParser.class);
 
-
     interface DEFLineParser {
         boolean parse(DEFParsingContext ctx, String line);
     }
@@ -106,24 +105,28 @@ public class DEFParser {
     }
 
 
-    public static final String DEFAULT_CHARSET = "Windows-1252";
+    public static final Charset DEFAULT_CHARSET = Charset.forName("Windows-1252");
+
+    public DEF parse(File file) throws IOException {
+        return parse(file, DEFAULT_CHARSET);
+    }
 
     public DEF parse(File file, Charset charset) throws IOException {
         return parse(file, new FileInputStream(file), charset);
     }
 
     public DEF parse(File file, InputStream is, Charset charset) {
-        return parse(file, new InputStreamReader(is, charset));
+        return parse(file, new InputStreamReader(is, charset), charset);
     }
 
-    public DEF parse(File file, Reader reader) {
-        return parse(file, new BufferedReader(reader));
+    public DEF parse(File file, Reader reader, Charset charset) {
+        return parse(file, new BufferedReader(reader), charset);
     }
 
-    public DEF parse(File file, BufferedReader reader) {
+    public DEF parse(File file, BufferedReader reader, Charset charset) {
         log.info("Parsing DEF from {}", file);
 
-        DEFParsingContext ctx = new DEFParsingContext(file, new DirectoryConversionLoader(file.getParentFile()));
+        DEFParsingContext ctx = new DEFParsingContext(file, new DirectoryConversionLoader(file.getParentFile(), charset));
         reader.lines().forEach(it -> parseLine(ctx, it));
 
         log.info("Finished parsing {}", file);

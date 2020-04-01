@@ -29,11 +29,20 @@ public class DEFTests {
     }
 
     @Test
-    public void loadConversion() throws URISyntaxException, IOException {
+    public void loadMapping() throws URISyntaxException, IOException {
         DEF def = loadRD2008();
 
         Dimension var = def.getDimension("Tipo de AIH");
         CategoryMapping conv = def.getMapping(var);
+        assertEquals("Normal", conv.get("1").getDescription());
+    }
+
+    @Test
+    public void loadConversion() throws URISyntaxException, IOException {
+        DEF def = loadRD2008();
+
+        Dimension var = def.getDimension("Tipo de AIH");
+        DimensionConversor conv = def.getConversor(var);
         assertEquals("Normal", conv.get("1").getDescription());
     }
 

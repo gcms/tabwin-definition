@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 
 import org.junit.Test;
@@ -12,7 +13,7 @@ import br.gov.go.saude.tabwin.definition.TestUtils;
 
 public class DBFParserTests {
     @Test
-    public void testParseSimple() throws URISyntaxException {
+    public void testParseSimple() throws URISyntaxException, FileNotFoundException {
         //LGrupo de Procedimentos    ,PROC_REA  ,NO_GRUPO  ,DBF\TB_GRUPO.DBF
         File tabWinDir = TestUtils.getTabWinDir();
         File dbfFile = new File(tabWinDir, "DBF/TB_GRUPO.DBF");

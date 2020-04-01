@@ -3,28 +3,32 @@ package br.gov.go.saude.tabwin.definition;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Associates a dimension variable to a mapping from values to categories.
+ * Enable mapping values/description to categories.
+ */
 public class DimensionConversor {
     private final Dimension dimension;
-    private final CategoryMapping conversor;
+    private final CategoryMapping mapping;
 
-    public DimensionConversor(Dimension dimension, CategoryMapping conversor) {
+    public DimensionConversor(Dimension dimension, CategoryMapping mapping) {
         this.dimension = dimension;
-        this.conversor = conversor;
+        this.mapping = mapping;
     }
 
     public Dimension getDimension() {
         return dimension;
     }
 
-    public CategoryMapping getConversor() {
-        return conversor;
+    public CategoryMapping getMapping() {
+        return mapping;
     }
 
     public Optional<? extends Category> extractCategory(DimensionRecord record) {
-        String fieldValue = record.read(dimension.getField(), conversor.getStartIndex(), conversor.getValueLength());
+        String fieldValue = record.read(dimension.getField(), mapping.getStartIndex(), mapping.getValueLength());
 
         return Optional.ofNullable(fieldValue)
-                .map(it -> conversor.findByValue(it).orElse(null));
+                .map(it -> mapping.findByValue(it).orElse(null));
     }
 
     public Optional<String> extractDescription(DimensionRecord record) {
@@ -33,7 +37,7 @@ public class DimensionConversor {
 
 
     public Stream<? extends Category> getEntries() {
-        return conversor.getEntries();
+        return mapping.getEntries();
     }
 
     public Stream<String> getAllDescriptions() {
@@ -41,18 +45,18 @@ public class DimensionConversor {
     }
 
     public Category get(String value) {
-        return conversor.get(value);
+        return mapping.get(value);
     }
 
     public Optional<? extends Category> findByValue(String value) {
-        return conversor.findByValue(value);
+        return mapping.findByValue(value);
     }
 
     public Optional<? extends Category> findByDescription(String description) {
-        return conversor.findByDescription(description);
+        return mapping.findByDescription(description);
     }
 
     public int getDescriptionLength() {
-        return conversor.getDescriptionLength();
+        return mapping.getDescriptionLength();
     }
 }

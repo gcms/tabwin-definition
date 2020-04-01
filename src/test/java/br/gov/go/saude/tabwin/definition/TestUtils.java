@@ -2,6 +2,8 @@ package br.gov.go.saude.tabwin.definition;
 
 import br.gov.go.saude.tabwin.definition.cnv.CNV;
 import br.gov.go.saude.tabwin.definition.cnv.CNVParser;
+import br.gov.go.saude.tabwin.definition.dbf.DBF;
+import br.gov.go.saude.tabwin.definition.dbf.DBFParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +41,12 @@ public class TestUtils {
         String name = Paths.get(path).getFileName().toString();
         return new CNVParser().parse(name, url.openStream());
     }
+
+    public static DBF parseDBF(String path) throws IOException {
+        URL url = TestUtils.class.getResource(path);
+        return new DBFParser().parse(url.openStream(), Charset.forName("Cp850"));
+    }
+
 
     public static File getFile(String path) throws URISyntaxException {
         URL url = TestUtils.class.getResource(path);

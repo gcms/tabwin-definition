@@ -6,7 +6,7 @@ import org.jamel.dbf.DbfReader;
 import org.jamel.dbf.structure.DbfHeader;
 import org.jamel.dbf.structure.DbfRow;
 
-import java.io.File;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,13 +20,14 @@ public class DBF implements ConversionFile {
     private final Map<Integer, DBFIndex> indexes;
 
 
-    public DBF(final File file, Charset charset) {
-        try (DbfReader reader = new DbfReader(file, charset)) {
+    public DBF(InputStream is, Charset charset) {
+        try (DbfReader reader = new DbfReader(is, charset)) {
             this.header = reader.getHeader();
             this.rows = readRows(reader);
         }
 
         this.indexes = new ConcurrentHashMap<>();
+
     }
 
     private static List<DbfRow> readRows(DbfReader reader) {

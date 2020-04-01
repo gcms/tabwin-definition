@@ -1,7 +1,6 @@
 package br.gov.go.saude.tabwin.definition.cnv;
 
 import br.gov.go.saude.tabwin.definition.ConversionParser;
-import br.gov.go.saude.tabwin.definition.TabWinDefinitionException;
 import br.gov.go.saude.tabwin.definition.cnv.filter.CNVFilter;
 import br.gov.go.saude.tabwin.definition.cnv.filter.CNVFilterRange;
 import br.gov.go.saude.tabwin.definition.cnv.filter.CNVFilterValue;
@@ -10,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -93,23 +93,25 @@ public class CNVParser implements ConversionParser {
             int length = Integer.parseInt(mr.group(2));
             String type = mr.group(3);
 
-            context.setNumLines(lines);
+            context.setCategoriesCount(lines);
             context.setFieldLength(length);
             context.setType(type);
 
         } catch (IllegalStateException ex) {
-            throw TabWinDefinitionException.parseException(String.format("Error parsing CNV header in line '%s'", line), ex);
+            throw CNVParseException.cnvHeader(line, ex);
         }
     }
 
 
-    private void parseContent(CNVParsingContext context, BufferedReader reader) {
-        reader.lines().forEach(line -> parseLine(context, line));
+    private void parseContent(CNVParsingContext context, BufferedReader reader) throws CNVParseException {
+        for (Iterator<String> it = reader.lines().iterator(); it.hasNext(); ) {
+            parseLine(context, it.next());
+        }
     }
 
     private static final Pattern LINE_PATTERN = Pattern.compile("^([\\s\\d]{3})([\\s\\d]{4})\\s(.{52})([0-9A-Za-z,\\.\\s\\-]+)[\\s;]*");
 
-    static void parseLine(final CNVParsingContext context, String line) {
+    static void parseLine(final CNVParsingContext context, String line) throws CNVParseException {
         context.countLine();
 
         if (line == null)
@@ -122,18 +124,24 @@ public class CNVParser implements ConversionParser {
         if (line.replaceAll("[^\\w]", "").isEmpty())
             return;
 
+        try {
+            Matcher m = LINE_PATTERN.matcher(line);
+            m.matches();
 
-        Matcher m = LINE_PATTERN.matcher(line);
-        if (!m.matches())
-            throw TabWinDefinitionException.parseException(String.format("Invalid CNV line in %s: %d %s", context.getName(), context.getCurrentLine(), line));
+            String subtotal = m.group(1).trim();
+            String order = m.group(2).trim();
+            String description = m.group(3).trim();
+            String values = m.group(4).trim();
 
-        String subtotal = m.group(1).trim();
-        String order = m.group(2).trim();
-        String description = m.group(3).trim();
-        String values = m.group(4).trim();
+            List<CNVFilter> filter = parseValues(context, values);
 
-        List<CNVFilter> filter = parseValues(context, values);
-        context.addLine(subtotal, order, description, filter);
+            context.addLine(subtotal, order, description, filter);
+        } catch (NumberFormatException | IllegalStateException ex) {
+            throw CNVParseException.invalidLine(context, line, ex);
+        } catch (IndexOutOfBoundsException ex) {
+            throw CNVParseException.invalidCategoryIndex(context, line, ex);
+        }
+
     }
 
     static List<CNVFilter> parseValues(CNVParsingContext context, final String values) {

@@ -7,6 +7,10 @@ import org.jamel.dbf.structure.DbfRow;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Represents the categories of a DBF file, indexed by a given key field.
+ * The same DBFIndex can be reused for multiple mappings.
+ */
 public class DBFIndex {
 
     private final Map<String, DbfRow> entries;

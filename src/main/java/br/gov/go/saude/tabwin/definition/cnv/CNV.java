@@ -7,7 +7,15 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Represents a CNV File, i.e. it's header and categories. Initializes a CNVCategoryFinder to
+ * allow for searching for a category by value.
+ */
 public class CNV implements ConversionFile {
+    /**
+     * Keeps CNV Header (num of entries, field length, type) as well as characteristics
+     * identified during parsing that will guide the choice of adequate search strategies.
+     */
     public static class CNVHeader {
         private final String name;
 
@@ -38,7 +46,7 @@ public class CNV implements ConversionFile {
             return description;
         }
 
-        public int getNumLines() {
+        public int getCategoriesCount() {
             return lines;
         }
 
@@ -63,36 +71,35 @@ public class CNV implements ConversionFile {
         }
     }
 
-    private CNVHeader header;
+    private final CNVHeader header;
 
-    protected CNVHeader getHeader() {
-        return header;
-    }
-
-    private CNVCategory[] categories;
+    private final CNVCategory[] categories;
     private int descriptionLength;
 
-    private CNVCategoryFinder finder;
-    private Map<String, CNVCategory> descriptionIndex;
+    private final CNVCategoryFinder finder;
+    private final Map<String, CNVCategory> descriptionIndex;
 
     protected CNV(CNVHeader header, CNVCategory[] categories) {
         this.header = header;
         this.categories = categories;
 
-        if (this.header.getNumLines() != categories.length)
-            throw TabWinDefinitionException.missingCategories(header);
+        assert header.getCategoriesCount() == categories.length;
 
         for (int i = 0; i < categories.length; i++) {
             CNVCategory category = categories[i];
-
-            if (category == null)
-                throw TabWinDefinitionException.missingCategories(header, i);
+            assert category != null;
 
             descriptionLength = Math.max(descriptionLength, category.getDescription().length());
         }
 
+        descriptionLength = Math.min(descriptionLength, 50); // 50 is max len for CNV category desc
+
         finder = CNVCategoryFinder.createFinder(header, categories);
         descriptionIndex = Utils.indexBy(categories, CNVCategory::getDescription);
+    }
+
+    protected CNVHeader getHeader() {
+        return header;
     }
 
     public Stream<Category> getEntries() {
@@ -112,7 +119,7 @@ public class CNV implements ConversionFile {
     }
 
     public int getDescriptionLength() {
-        return descriptionLength;
+        return descriptionLength; // Maybe we could use the maximum allowed length of 50
     }
 
     public Category findEntryByDescription(String description) {

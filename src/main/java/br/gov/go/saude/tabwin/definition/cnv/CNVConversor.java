@@ -7,6 +7,9 @@ import br.gov.go.saude.tabwin.definition.Category;
 import br.gov.go.saude.tabwin.definition.CategoryMapping;
 import br.gov.go.saude.tabwin.definition.ConversionFile;
 
+/**
+ * Represents a conversor using a CNV file.
+ */
 public class CNVConversor implements CategoryMapping {
     private CNV cnv;
     private int index;

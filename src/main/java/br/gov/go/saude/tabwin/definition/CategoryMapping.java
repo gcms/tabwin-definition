@@ -4,6 +4,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Represents a mapping of values to categories built from a ConversionFile.
+ * Multiple CategoryMapping s can reuse the same ConversionFile, using different
+ * joining fields.
+ */
 public interface CategoryMapping {
     ConversionFile getFile();
 
