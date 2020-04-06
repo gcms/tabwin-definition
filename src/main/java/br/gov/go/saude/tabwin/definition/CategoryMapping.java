@@ -14,7 +14,7 @@ public interface CategoryMapping {
 
     Stream<? extends Category> getEntries();
 
-    default Category get(String value) {
+    default Category get(String value) throws NoSuchElementException {
         return findByValue(value)
                 .orElseThrow(() -> new NoSuchElementException(String.format("Couldn't find entry for value '%s'", value)));
     }

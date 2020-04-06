@@ -99,7 +99,7 @@ public class DEF {
     }
 
 
-    public Dimension getDimension(String varName) {
+    public Dimension getDimension(String varName) throws NoSuchElementException {
         return findDimension(varName)
                 .orElseThrow(() -> new NoSuchElementException(String.format("Dimension named '%s' not found in %s", varName, getName())));
     }
@@ -115,7 +115,7 @@ public class DEF {
                 .findFirst();
     }
 
-    public Increment getIncrement(String varName) {
+    public Increment getIncrement(String varName) throws NoSuchElementException {
         return findIncrement(varName)
                 .orElseThrow(() -> new NoSuchElementException(String.format("Increment named '%s' not found in %s", varName, getName())));
     }
