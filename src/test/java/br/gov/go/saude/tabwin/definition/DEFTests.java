@@ -2,8 +2,10 @@ package br.gov.go.saude.tabwin.definition;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -88,6 +90,19 @@ public class DEFTests {
         DEF def = TestUtils.parseDEF("/tabwin/SIMPLE.DEF");
 
         def.getIncrement("Qtde.Leitos");
+    }
+
+    @Test
+    public void testListFiles() throws IOException, URISyntaxException {
+        DEF def = TestUtils.parseDEF("/tabwin/SIMPLE.DEF");
+
+        List<File> files = def.listDataFiles();
+        assertEquals(1, files.size());
+        assertEquals("RDGO1801.DBC", files.get(0).getName());
+
+        assertEquals(0, def.listDataFiles("DN*dbc").size());
+        assertEquals(1, def.listDataFiles("RDGO*DBC").size());
+        assertTrue(def.listDataFiles().get(0).exists());
     }
 
 }

@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.FileSystems;
+import java.nio.file.PathMatcher;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DEF {
@@ -42,6 +45,21 @@ public class DEF {
         return conversionLoader.loadConversor(dimension);
     }
 
+    private Stream<File> listDatDirFiles() throws FileNotFoundException {
+        return Arrays.stream(Objects.requireNonNull(getDataDir().listFiles()));
+    }
+
+    public List<File> listDataFiles() throws FileNotFoundException {
+        String dirPath = getFilePattern().replaceFirst("[\\\\/][^\\\\/]*$", "");
+        String pattern = getFilePattern().replace(dirPath, "").replaceAll("^[/\\\\]", "");
+        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
+        return listDatDirFiles().filter(it -> pathMatcher.matches(it.toPath().getFileName())).collect(Collectors.toList());
+    }
+
+    public List<File> listDataFiles(String glob) throws FileNotFoundException {
+        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:" + glob);
+        return listDataFiles().stream().filter(it -> pathMatcher.matches(it.toPath().getFileName())).collect(Collectors.toList());
+    }
 
     public String getName() {
         return path.getName();
