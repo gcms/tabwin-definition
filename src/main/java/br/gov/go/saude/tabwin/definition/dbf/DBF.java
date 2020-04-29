@@ -18,16 +18,17 @@ public class DBF implements ConversionFile {
     private final List<DbfRow> rows;
 
     private final Map<Integer, DBFIndex> indexes;
+    private String fileName;
 
 
-    public DBF(InputStream is, Charset charset) {
+    public DBF(String fileName, InputStream is, Charset charset) {
+        this.fileName = fileName;
         try (DbfReader reader = new DbfReader(is, charset)) {
             this.header = reader.getHeader();
             this.rows = readRows(reader);
         }
 
         this.indexes = new ConcurrentHashMap<>();
-
     }
 
     private static List<DbfRow> readRows(DbfReader reader) {
@@ -61,4 +62,13 @@ public class DBF implements ConversionFile {
         return new DBFConversor(this, header.getField(descFieldName), getIndex(fieldIndex));
     }
 
+    @Override
+    public String getFileName() {
+        return fileName;
+    }
+
+    @Override
+    public String getName() {
+        return fileName.replaceFirst("(\\.\\w+$)", "");
+    }
 }

@@ -44,7 +44,8 @@ public class TestUtils {
 
     public static DBF parseDBF(String path) throws IOException {
         URL url = TestUtils.class.getResource(path);
-        return new DBFParser().parse(url.openStream(), Charset.forName("Cp850"));
+        String name = new File(url.getFile()).getName();
+        return new DBFParser().parse(name, url.openStream(), Charset.forName("Cp850"));
     }
 
 

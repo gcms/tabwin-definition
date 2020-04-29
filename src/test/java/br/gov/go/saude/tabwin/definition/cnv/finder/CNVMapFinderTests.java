@@ -27,4 +27,20 @@ public class CNVMapFinderTests {
         CNV cnv = TestUtils.parseCNV("/tabwin/CNV/SEXO.CNV");
         new CNVMapFinder(cnv.getCategories().toArray(CNVCategory[]::new));
     }
+
+    @Test
+    public void testRepeatedValueSameCategory() throws IOException {
+        CNV cnv = TestUtils.parseCNV("/tabwin/CNV/DUPLICADO_OK.CNV");
+        CNVMapFinder finder = new CNVMapFinder(cnv.getCategories().toArray(CNVCategory[]::new));
+
+        assertEquals("Ignorado", finder.findEntry("0").getDescription());
+        assertEquals("Feminino", finder.findEntry("2").getDescription());
+        assertEquals("Feminino", finder.findEntry("3").getDescription());
+    }
+
+    @Test(expected = TabWinDefinitionException.class)
+    public void testRepeatedValueSameCategoryInvalid() throws IOException {
+        CNV cnv = TestUtils.parseCNV("/tabwin/CNV/DUPLICADO_NOK.CNV");
+        new CNVMapFinder(cnv.getCategories().toArray(CNVCategory[]::new));
+    }
 }

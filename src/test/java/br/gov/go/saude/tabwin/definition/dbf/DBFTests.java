@@ -1,6 +1,7 @@
 package br.gov.go.saude.tabwin.definition.dbf;
 
 import br.gov.go.saude.tabwin.definition.*;
+import br.gov.go.saude.tabwin.definition.cnv.CNV;
 import org.junit.Test;
 
 import java.io.File;
@@ -71,5 +72,13 @@ public class DBFTests {
 
         assertTrue(conversor.findByDescription("Procedimentos clínicos").isPresent());
         assertEquals("03", conversor.findByDescription("Procedimentos clínicos").get().getKeyValue());
+    }
+
+    @Test
+    public void testGetName() throws IOException {
+        DBF dbf = TestUtils.parseDBF("/tabwin/DBF/TB_GRUPO.DBF");
+
+        assertEquals("TB_GRUPO.DBF", dbf.getFileName());
+        assertEquals("TB_GRUPO", dbf.getName());
     }
 }

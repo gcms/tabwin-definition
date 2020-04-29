@@ -71,6 +71,16 @@ public class CNV implements ConversionFile {
         }
     }
 
+    @Override
+    public String getFileName() {
+        return header.getName();
+    }
+
+    @Override
+    public String getName() {
+        return header.getName().replaceFirst("(\\.\\w+)$", "");
+    }
+
     private final CNVHeader header;
 
     private final CNVCategory[] categories;

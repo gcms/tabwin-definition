@@ -2,6 +2,7 @@ package br.gov.go.saude.tabwin.definition.cnv;
 
 import br.gov.go.saude.tabwin.definition.Category;
 import br.gov.go.saude.tabwin.definition.TabWinDefinitionException;
+import br.gov.go.saude.tabwin.definition.TestUtils;
 import org.junit.Test;
 
 import br.gov.go.saude.tabwin.definition.CategoryMapping;
@@ -111,6 +112,14 @@ public class CNVTests {
             assertTrue("Expected 'missing category', found: " + ex.getMessage(),
                     ex.getMessage().contains("missing category"));
         }
+    }
+
+    @Test
+    public void testGetName() throws IOException {
+        CNV cnv = TestUtils.parseCNV("/tabwin/CNV/PERM.CNV");
+
+        assertEquals("PERM.CNV", cnv.getFileName());
+        assertEquals("PERM", cnv.getName());
     }
 
 

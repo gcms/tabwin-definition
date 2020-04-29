@@ -23,10 +23,10 @@ public class DBFParser implements ConversionParser {
     }
 
     public DBF parse(File file, Charset charset) throws FileNotFoundException {
-        return parse(new FileInputStream(file), charset);
+        return parse(file.getName(), new FileInputStream(file), charset);
     }
 
-    public DBF parse(InputStream is, Charset charset) {
-        return new DBF(is, charset);
+    public DBF parse(String name, InputStream is, Charset charset) {
+        return new DBF(name, is, charset);
     }
 }
