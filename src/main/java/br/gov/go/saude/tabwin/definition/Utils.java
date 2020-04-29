@@ -1,7 +1,6 @@
 package br.gov.go.saude.tabwin.definition;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,6 +51,20 @@ public class Utils {
 
     public static <K, V> Map<K, V> indexBy(Iterator<V> iterator, Function<? super V, K> keyExtractor) {
         return Maps.uniqueIndex(iterator, keyExtractor::apply);
+    }
+
+    public static <K, V> Multimap<K, V> indexMultimapBy(V[] array, Function<? super V, K> keyExtractor) {
+        return indexMultimapBy(Arrays.stream(array), keyExtractor);
+    }
+
+    public static <K, V> Multimap<K, V> indexMultimapBy(Iterator<V> iterator, Function<? super V, K> keyExtractor) {
+        return indexMultimapBy(Streams.stream(iterator), keyExtractor);
+    }
+
+    public static <K, V> Multimap<K, V> indexMultimapBy(Stream<V> stream, Function<? super V, K> keyExtractor) {
+        Multimap<K, V> result = HashMultimap.create();
+        stream.forEach(v -> result.put(keyExtractor.apply(v), v));
+        return result;
     }
 
     public static <K, V> Map<K, V> indexBy(V[] array, Function<? super V, K> keyExtractor) {

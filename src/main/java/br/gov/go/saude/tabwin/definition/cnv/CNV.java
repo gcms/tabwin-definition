@@ -1,10 +1,13 @@
 package br.gov.go.saude.tabwin.definition.cnv;
 
 import br.gov.go.saude.tabwin.definition.*;
-import br.gov.go.saude.tabwin.definition.cnv.finder.*;
+import br.gov.go.saude.tabwin.definition.cnv.finder.CNVCategoryFinder;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 /**
@@ -87,13 +90,13 @@ public class CNV implements ConversionFile {
     private int descriptionLength;
 
     private final CNVCategoryFinder finder;
-    private final Map<String, CNVCategory> descriptionIndex;
+    private final Multimap<String, CNVCategory> descriptionIndex;
 
     protected CNV(CNVHeader header, CNVCategory[] categories) {
         this.header = header;
         this.categories = categories;
 
-        assert header.getCategoriesCount() == categories.length;
+        assert Math.abs(header.getCategoriesCount() - categories.length) <= 1;
 
         for (int i = 0; i < categories.length; i++) {
             CNVCategory category = categories[i];
@@ -105,7 +108,7 @@ public class CNV implements ConversionFile {
         descriptionLength = Math.min(descriptionLength, 50); // 50 is max len for CNV category desc
 
         finder = CNVCategoryFinder.createFinder(header, categories);
-        descriptionIndex = Utils.indexBy(categories, CNVCategory::getDescription);
+        descriptionIndex = Utils.indexMultimapBy(categories, CNVCategory::getDescription);
     }
 
     protected CNVHeader getHeader() {
@@ -132,8 +135,12 @@ public class CNV implements ConversionFile {
         return descriptionLength; // Maybe we could use the maximum allowed length of 50
     }
 
-    public Category findEntryByDescription(String description) {
-        return descriptionIndex.get(description);
+    public CNVCategory findEntryByDescription(String description) {
+        return descriptionIndex.get(description).stream().findFirst().orElse(null);
+    }
+
+    public Collection<CNVCategory> findEntriesByDescription(String description) {
+        return Collections.unmodifiableCollection(descriptionIndex.get(description));
     }
 
     @Override
@@ -142,7 +149,12 @@ public class CNV implements ConversionFile {
     }
 
     public CNVConversor createConversor(String offset) {
-        return createConversor(Integer.parseInt(offset) - 1);
+        int index = 0;
+        try {
+            index = Integer.parseInt(offset) - 1;
+        } catch (NumberFormatException ignored) {
+        }
+        return createConversor(index);
     }
 
     public CNVConversor createConversor(int offset) {

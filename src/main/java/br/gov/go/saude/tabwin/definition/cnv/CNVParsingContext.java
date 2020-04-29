@@ -1,8 +1,10 @@
 package br.gov.go.saude.tabwin.definition.cnv;
 
+import br.gov.go.saude.tabwin.definition.Category;
 import br.gov.go.saude.tabwin.definition.cnv.CNV.CNVHeader;
 import br.gov.go.saude.tabwin.definition.cnv.filter.CNVFilter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CNVParsingContext {
@@ -56,14 +58,17 @@ public class CNVParsingContext {
     public CNV build() throws CNVParseException {
         CNVHeader header = new CNVHeader(name, comment, numLines, fieldLength, type, hasRange, !hasCharOnFilters);
 
+        List<CNVCategory> validCategories = new ArrayList<>();
         for (int i = 0; i < categories.length; i++) {
             CNVCategory category = categories[i];
-            if (category == null) {
-                throw CNVParseException.missingCategories(header, i);
+            if (category == null && i < categories.length - 1) { // Tolerates cases in which the last category is not defined
+                throw CNVParseException.missingCategories(header, i + 1);
+            } else if (category != null) {
+                validCategories.add(category);
             }
         }
 
-        return new CNV(header, categories);
+        return new CNV(header, validCategories.toArray(new CNVCategory[validCategories.size()]));
     }
 
     public void setHasCharOnFilter(boolean hasCharOnFilters) {

@@ -9,6 +9,7 @@ import br.gov.go.saude.tabwin.definition.CategoryMapping;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -122,5 +123,17 @@ public class CNVTests {
         assertEquals("PERM", cnv.getName());
     }
 
+    @Test
+    public void testRepeatedDescription() throws IOException {
+        CNV cnv = TestUtils.parseCNV("/tabwin/CNV/CBO2002.cnv");
+
+        CNVCategory cat = cnv.findEntryByDescription("Professor de educacao fisica no ensino medio");
+
+        assertEquals(1, cat.getFilter().size());
+        assertEquals("232120", cat.getFilter().get(0).getValue());
+
+        Collection<CNVCategory> cats = cnv.findEntriesByDescription("Professor de educacao fisica no ensino medio");
+        assertEquals(2, cats.size());
+    }
 
 }
