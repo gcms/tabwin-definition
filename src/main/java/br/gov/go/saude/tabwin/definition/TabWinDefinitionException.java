@@ -32,4 +32,7 @@ public class TabWinDefinitionException extends RuntimeException {
     }
 
 
+    public static TabWinDefinitionException illegalArgument(IllegalArgumentException ex) {
+        return new TabWinDefinitionException(ex.getMessage(), ex);
+    }
 }

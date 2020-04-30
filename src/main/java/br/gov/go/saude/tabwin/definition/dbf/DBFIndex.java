@@ -1,5 +1,6 @@
 package br.gov.go.saude.tabwin.definition.dbf;
 
+import br.gov.go.saude.tabwin.definition.TabWinDefinitionException;
 import br.gov.go.saude.tabwin.definition.Utils;
 import org.jamel.dbf.structure.DbfField;
 import org.jamel.dbf.structure.DbfRow;
@@ -18,7 +19,12 @@ public class DBFIndex {
 
     public DBFIndex(final DbfField keyField, final Stream<DbfRow> rows) {
         this.keyField = keyField;
-        this.entries = Utils.indexBy(rows, it -> it.getString(keyField.getName()));
+
+        try {
+            this.entries = Utils.indexBy(rows, it -> it.getString(keyField.getName()));
+        } catch (IllegalArgumentException ex) {
+            throw TabWinDefinitionException.illegalArgument(ex);
+        }
     }
 
     public DbfRow get(String key) {
