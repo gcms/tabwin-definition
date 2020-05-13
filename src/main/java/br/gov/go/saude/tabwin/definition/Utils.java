@@ -62,7 +62,7 @@ public class Utils {
     }
 
     public static <K, V> Multimap<K, V> indexMultimapBy(Stream<V> stream, Function<? super V, K> keyExtractor) {
-        Multimap<K, V> result = HashMultimap.create();
+        Multimap<K, V> result = LinkedHashMultimap.create();
         stream.forEach(v -> result.put(keyExtractor.apply(v), v));
         return result;
     }
