@@ -33,7 +33,9 @@ public class DBFIndex {
 
 
     public DBFCategory getEntry(String keyValue, String descField) {
-        return buildEntry(keyValue, get(keyValue).getString(descField));
+        DbfRow row = get(keyValue);
+
+        return row == null ? null : buildEntry(keyValue, row.getString(descField));
     }
 
     public Stream<DBFCategory> getEntries(String descField) {
