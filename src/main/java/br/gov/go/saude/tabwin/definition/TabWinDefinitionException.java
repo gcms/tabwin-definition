@@ -1,7 +1,5 @@
 package br.gov.go.saude.tabwin.definition;
 
-import br.gov.go.saude.tabwin.definition.cnv.CNV;
-
 import java.io.IOException;
 
 public class TabWinDefinitionException extends RuntimeException {
@@ -27,6 +25,11 @@ public class TabWinDefinitionException extends RuntimeException {
         return new TabWinDefinitionException(message);
     }
 
+    public static TabWinDefinitionException except(String message, RuntimeException ex) {
+        return new TabWinDefinitionException(message, ex);
+    }
+
+
     public static TabWinDefinitionException illegalArgument(String message) {
         return except(message);
     }
@@ -34,5 +37,9 @@ public class TabWinDefinitionException extends RuntimeException {
 
     public static TabWinDefinitionException illegalArgument(IllegalArgumentException ex) {
         return new TabWinDefinitionException(ex.getMessage(), ex);
+    }
+
+    public static TabWinDefinitionException illegalArgument(String message, IllegalArgumentException ex) {
+        return new TabWinDefinitionException(message, ex);
     }
 }

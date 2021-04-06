@@ -264,4 +264,13 @@ public class CNVParserTests {
 
         assertEquals("PT SAS conjunta numero 20 public.25-05-2005 - RELAÇÃO DE DOENÇAS NOTIFICAVEIS E AGRAVOS COM BLOQUEIO AUTOMATICO DE PAGTO AIH", cnv.getHeader().getDescription());
     }
+
+    @Test
+    public void testWithHierarchy() throws IOException {
+        CNV cnv = TestUtils.parseCNV("/tabwin/CNV/ESFERAJUR.CNV");
+
+        cnv.getCategories().forEach(System.out::println);
+        System.out.println(cnv.findEntryByValue("1040").getDescription());
+    }
+
 }

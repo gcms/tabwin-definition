@@ -65,6 +65,17 @@ public class DEFParser {
 
             List<String> parts = Splitter.on(",").trimResults().splitToList(line.substring(1));
 
+            try {
+                parseVariableParts(ctx, type, parts);
+            } catch (IndexOutOfBoundsException ex) {
+                throw TabWinDefinitionException.except(String.format("Error parssing line: %s.", line), ex);
+            }
+
+
+            return true;
+        }
+
+        private void parseVariableParts(DEFParsingContext ctx, Variable.Type type, List<String> parts) {
             switch (type) {
                 case I:
                     ctx.addIncrement(type, parts.get(0), parts.get(1));
@@ -88,8 +99,6 @@ public class DEFParser {
                 default:
                     break;
             }
-
-            return true;
         }
 
     }

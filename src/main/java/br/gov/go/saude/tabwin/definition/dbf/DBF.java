@@ -2,6 +2,7 @@ package br.gov.go.saude.tabwin.definition.dbf;
 
 import br.gov.go.saude.tabwin.definition.ConversionFile;
 import br.gov.go.saude.tabwin.definition.Dimension;
+import br.gov.go.saude.tabwin.definition.TabWinDefinitionException;
 import org.jamel.dbf.DbfReader;
 import org.jamel.dbf.structure.DbfHeader;
 import org.jamel.dbf.structure.DbfRow;
@@ -44,8 +45,12 @@ public class DBF implements ConversionFile {
     }
 
     private DBFIndex getIndex(int index) {
-        return indexes.computeIfAbsent(index < 0 ? 0 : index,
-                (i) -> new DBFIndex(header.getField(i), rows.stream()));
+        try {
+            return indexes.computeIfAbsent(Math.max(0, index),
+                    (i) -> new DBFIndex(header.getField(i), rows.stream()));
+        } catch (IllegalArgumentException ex) {
+            throw TabWinDefinitionException.illegalArgument(String.format("Error indexing field %d in %s", index, fileName), ex);
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import br.gov.go.saude.tabwin.definition.cnv.filter.CNVFilter;
 import com.google.common.base.Joiner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CNVCategory implements Category, Comparable<CNVCategory> {
@@ -32,7 +33,7 @@ public class CNVCategory implements Category, Comparable<CNVCategory> {
 
     @Override
     public List<CNVFilter> getFilter() {
-        return filter;
+        return Collections.unmodifiableList(filter);
     }
 
     protected void addFilter(List<CNVFilter> filters) {
